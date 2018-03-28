@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="jquery.min.js"></script>
+  <style type="text/css">
+    body {
+      height: 100%;
+    }
+
+    #div1 {
+      background: red;
+      position: absolute;
+      cursor: crosshair;
+    }
+
+    .Circle {
+      position: absolute;
+      background-color: yellow;
+      cursor: crosshair;
+    }
+
+    .burble {
+      position: absolute;
+      cursor: crosshair;
+    }
+
+    .start_circle {
+      position: absolute;
+      background: red;
+      cursor: crosshair;
+    }
+
+    .end_circle {
+      position: absolute;
+      background: green;
+      cursor: crosshair;
+    }
+    .time1{
+     
+    
+      position: absolute;
+      background: red;
+      cursor: crosshair;
+    }
+    .time2{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      left: 1150px;
+      top: 250px;
+      position: absolute;
+      background: green;
+      cursor: crosshair;
+    }
+    .time3{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      left: 1150px;
+      top: 0px;
+      position: absolute;
+      background: gray;
+      cursor: crosshair;
+    }
+    table{
+      border:black solid 2px;
+      border-collapse:collapse;
+            
+    }
+    td{
+      border:black solid 2px;
+      padding:10px;
+    }
+  </style>
+  <script>
+  	var data = new Array();
+	var lpl =0;
+    var circle = new Array();
+    var flag = 0;
+    var count = 12;//文件个数
+    var next = 0;
+    var k = Math.tan(10 * Math.PI / 180);
+    var sit = new Array();
+    sit[0] = new Object();   sit[0].w = 18; sit[0].l = 800; sit[0].d = 0;
+    sit[1] = new Object();   sit[1].w = 18; sit[1].l = 800; sit[1].d = 0.5;
+    sit[2] = new Object();   sit[2].w = 18; sit[2].l = 800; sit[2].d = 1;
+
+    sit[3] = new Object();   sit[3].w = 18; sit[3].l = 1000; sit[3].d = 0;
+    sit[4] = new Object();   sit[4].w = 18; sit[4].l = 1000; sit[4].d = 0.5;
+    sit[5] = new Object();   sit[5].w = 18; sit[5].l = 1000; sit[5].d = 1;
+
+    sit[6] = new Object();   sit[6].w = 18; sit[6].l = 1300; sit[6].d = 0;
+    sit[7] = new Object();   sit[7].w = 18; sit[7].l = 1300; sit[7].d = 0.5;
+    sit[8] = new Object();   sit[8].w = 18; sit[8].l = 1300; sit[8].d = 1;
+
+
+
+
+
+    sit[9] = new Object();    sit[9].w = 26; sit[9].l = 800; sit[9].d = 0;
+    sit[10] = new Object();   sit[10].w = 26; sit[10].l = 800; sit[10].d = 0.5;
+    sit[11] = new Object();   sit[11].w = 26; sit[11].l = 800; sit[11].d = 1;
+
+    sit[12] = new Object();   sit[12].w = 26; sit[12].l = 1000; sit[12].d = 0;
+    sit[13] = new Object();   sit[13].w = 26; sit[13].l = 1000; sit[13].d = 0.5;
+    sit[14] = new Object();   sit[14].w = 26; sit[14].l = 1000; sit[14].d = 1;
+
+    sit[15] = new Object();   sit[15].w = 26; sit[15].l = 1300; sit[15].d = 0;
+    sit[16] = new Object();   sit[16].w = 26; sit[16].l = 1300; sit[16].d = 0.5;
+    sit[17] = new Object();   sit[17].w = 26; sit[17].l = 1300; sit[17].d = 1;
+
+
+
+
+
+	sit[18] = new Object();   sit[18].w = 32; sit[18].l = 800; sit[18].d = 0;
+    sit[19] = new Object();   sit[19].w = 32; sit[19].l = 800; sit[19].d = 0.5;
+    sit[20] = new Object();   sit[20].w = 32; sit[20].l = 800; sit[20].d = 1;
+
+    sit[21] = new Object();   sit[21].w = 32; sit[21].l = 1000; sit[21].d = 0;
+    sit[22] = new Object();   sit[22].w = 32; sit[22].l = 1000; sit[22].d = 0.5;
+    sit[23] = new Object();   sit[23].w = 32; sit[23].l = 1000; sit[23].d = 1;
+
+    sit[24] = new Object();   sit[24].w = 32; sit[24].l = 1300; sit[24].d = 0;
+    sit[25] = new Object();   sit[25].w = 32; sit[25].l = 1300; sit[25].d = 0.5;
+    sit[26] = new Object();   sit[26].w = 32; sit[26].l = 1300; sit[26].d = 1;
+
+function rdsort(array)
+{
+	var currentIndex = array.length;
+    var temporary;
+    var toIndex;
+ 
+    while (currentIndex) {
+        toIndex = Math.floor(Math.random() * currentIndex--);
+        temporary = array[currentIndex].w;
+        array[currentIndex].w = array[toIndex].w;
+        array[toIndex].w = temporary;
+
+		temporary = array[currentIndex].l;
+        array[currentIndex].l = array[toIndex].l;
+        array[toIndex].l = temporary;
+
+		temporary = array[currentIndex].d;
+        array[currentIndex].d = array[toIndex].d;
+        array[toIndex].d = temporary;
+    }
+    return array;
+}
+
+
+//button_style
+    function button_style(f1,f2,Btn_ID)
+    {
+      if (f1 == 0) {
+        document.getElementById(Btn_ID).style.width = "36px";
+        document.getElementById(Btn_ID).style.height = "36px";
+      }
+      else if (f1 == 1) {
+        document.getElementById(Btn_ID).style.width = "52px";
+        document.getElementById(Btn_ID).style.height = "52px";
+      }
+      else if (f1 == 2) {
+        document.getElementById(Btn_ID).style.width = "64px";
+        document.getElementById(Btn_ID).style.height = "64px";
+      }
+      document.getElementById(Btn_ID).style.borderRadius = "50%";
+      document.getElementById(Btn_ID).style.top = "250px";
+
+
+      if(Btn_ID == "btn1")
+      {
+        document.getElementById(Btn_ID).style.left = "150px";
+      }
+      else
+      {
+        if (f2 == 0) {
+          document.getElementById(Btn_ID).style.left = "950px";
+        }
+        else if (f2 == 1) {
+          document.getElementById(Btn_ID).style.left = "1150px";
+        }
+        else if (f2 == 2) {
+          document.getElementById(Btn_ID).style.left = "1450px";
+        }
+      }
+    }
+
+
+
+
+    function abc(array,i)
+    {
+    	var wrapper_padding = 10;//圆环厚度
+      var time = 0;
+      var r=0;
+      var length=0;
+      var width=0;
+
+
+      r = array[i].w;
+      width = r;
+      //随机距离
+      length = array[i].l;
+      var factor1;
+      if(r==18)
+      {
+      	factor1=0;
+      }
+      else if(r==26)
+      {
+      	factor1=1;
+      }
+      else if(r==32)
+      {
+      	factor1=2;
+      }
+ 
+      var factor2;
+      if(length==800)
+      {
+      	factor2=0;
+      }
+      else if(length==1000)
+      {
+      	factor2=1;
+      }
+      else if(length==1300)
+      {
+      	factor2=2;
+      }
+      button_style(factor1,factor2,"btn1");
+      circle[0] = new Object();
+      circle[0].x = 150;
+      circle[0].y = 250;
+      circle[0].radius = r;
+      circle[0].id = 0;
+      button_style(factor1,factor2,"btn2");
+      circle[1] = new Object();
+      circle[1].x = 150+length;
+      circle[1].y = 250;
+      circle[1].radius = r;
+      circle[1].id = 1;
+
+
+      //随机密度
+      var factor3 = array[i].d;
+      if (factor3 == 0) {//密度为0
+
+		document.getElementById('text2').value='w:'+array[i].w+', '+'l:'+array[i].l+', '+'d:'+array[i].d;
+		//console.log("w:",array[i].w,"l:",array[i].l,"d:",array[i].d);
+		
+
+
+        for (var i = 2; i < count; i++) {
+          var y;
+          var x = parseInt(Math.random() * (length - 150) + 150);
+          var l = Math.floor(Math.random() * 2);
+          if(l == 0){
+            y = parseInt(Math.random() * (x*k + 250 - 150*k-70) + 35);
+          }
+          else{
+            y = parseInt(Math.random() * (700-(x*k + 250 + 150*k-70)) + (x*k + 250 + 150*k-70));
+          }
+          
+          var flag_q = 1;
+
+          if (i > 0) {     //使圆不重叠
+            for (var q = 0; q < i; q++) {
+              var r_r = Math.sqrt((circle[q].x - x) * (circle[q].x - x) + (circle[q].y - y) * (circle[q].y - y));
+              if (r_r < (r + circle[q].radius + wrapper_padding * 2) || r_r == 0) {
+                var y;
+                var x = parseInt(Math.random() * (length - 150) + 150);
+                var l = Math.floor(Math.random() * 2);
+                if(l == 0){
+                  y = parseInt(Math.random() * (x*k + 250 - 150*k-70) + 35);
+                }
+                else{
+                  y= parseInt(Math.random() * (700-(x*k + 250 + 150*k-70)) + (x*k + 250 + 150*k-70));
+                }
+                r = width;
+                flag_q = 0;
+                q = -1;
+              }
+            }
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+          }
+          else {
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+
+          }
+          $("#body").append("<div class='Circle' id='cir" + i + "'></div>");
+          $("#cir" + i).css("height", r * 2 + 'px');
+          $("#cir" + i).css("width", r * 2 + 'px');
+          $("#cir" + i).css("border-radius", r + 'px');
+          $("#cir" + i).css("left", x + 'px');
+          $("#cir" + i).css("top", y + 'px');
+        }
+      }
+      else if (factor3 == 0.5) {//密度为0.5
+
+		document.getElementById('text2').value='w:'+array[i].w+', '+'l:'+array[i].l+', '+'d:'+array[i].d;
+		//console.log("w:",array[i].w,"l:",array[i].l,"d:",array[i].d);
+		
+
+        for (var i = 2; i < count / 2 +1; i++) {
+          var x = parseInt(Math.random() * (length - 150) + 150);
+          var y = parseInt(Math.random() * (2 * x * k - 300 * k) + (250 + 150 * k - x * k));
+          var flag_q = 1;
+          if (i > 0) {     //使圆不重叠
+            for (var q = 0; q < i; q++) {
+              var r_r = Math.sqrt((circle[q].x - x) * (circle[q].x - x) + (circle[q].y - y) * (circle[q].y - y));
+              if (r_r < (r + circle[q].radius + wrapper_padding * 2) || r_r == 0) {
+                var x = parseInt(Math.random() * (length - 150) + 150);
+                var y = parseInt(Math.random() * (2 * x * k - 300 * k) + (250 + 150 * k - x * k));
+                r = width;
+                flag_q = 0;
+                q = -1;
+              }
+            }
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+          }
+          else {
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+
+          }
+          $("#body").append("<div class='Circle' id='cir" + i + "'></div>");
+          $("#cir" + i).css("height", r * 2 + 'px');
+          $("#cir" + i).css("width", r * 2 + 'px');
+          $("#cir" + i).css("border-radius", r + 'px');
+          $("#cir" + i).css("left", x + 'px');
+          $("#cir" + i).css("top", y + 'px');
+        }
+
+        
+        for (var i = count/2 + 1; i < count; i++) {
+          var y;
+          var x = parseInt(Math.random() * (length - 150) + 150);
+          var l = Math.floor(Math.random() * 2);
+          if(l == 0){
+            y = parseInt(Math.random() * (x*k + 250 - 150*k-70) + 35);
+          }
+          else{
+            y= parseInt(Math.random() * (700-(x*k + 250 + 150*k-70)) + (x*k + 250 + 150*k-70));
+          }
+          
+          var flag_q = 1;
+
+          if (i > 0) {     //使圆不重叠
+            for (var q = 0; q < i; q++) {
+              var r_r = Math.sqrt((circle[q].x - x) * (circle[q].x - x) + (circle[q].y - y) * (circle[q].y - y));
+              if (r_r < (r + circle[q].radius + wrapper_padding * 2) || r_r == 0) {
+                var y;
+                var x = parseInt(Math.random() * (length - 150) + 150);
+                var l = Math.floor(Math.random() * 2);
+                if(l == 0){
+                  y = parseInt(Math.random() * (x*k + 250 - 150*k-70) + 35);
+                }
+                else{
+                  y= parseInt(Math.random() * (700-(x*k + 250 + 150*k-70)) + (x*k + 250 + 150*k-70));
+                }
+                r = width;
+               // flag_q = 0;
+                q = 0;
+              }
+            }
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+          }
+          else {
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+
+          }
+          $("#body").append("<div class='Circle' id='cir" + i + "'></div>");
+          $("#cir" + i).css("height", r * 2 + 'px');
+          $("#cir" + i).css("width", r * 2 + 'px');
+          $("#cir" + i).css("border-radius", r + 'px');
+          $("#cir" + i).css("left", x + 'px');
+          $("#cir" + i).css("top", y + 'px');
+        }
+      }
+      else if (factor3 == 1) {//密度为1
+
+		document.getElementById('text2').value='w:'+array[i].w+', '+'l:'+array[i].l+', '+'d:'+array[i].d;	
+        //console.log("w:",array[i].w,"l:",array[i].l,"d:",array[i].d);
+        
+
+        for (var i = 2; i < count; i++) {
+          var x = parseInt(Math.random() * (length - 150) + 150);
+          var y = parseInt(Math.random() * (2 * x * k - 300 * k) + (250 + 150 * k - x * k));
+          var flag_q = 1;
+          if (i > 0) {     //使圆不重叠
+            for (var q = 0; q < i; q++) {
+              var r_r = Math.sqrt((circle[q].x - x) * (circle[q].x - x) + (circle[q].y - y) * (circle[q].y - y));
+              if (r_r < (r + circle[q].radius + wrapper_padding * 2) || r_r == 0) {
+                var x = parseInt(Math.random() * (length - 150) + 150);
+                var y = parseInt(Math.random() * (2 * x * k - 300 * k) + (250 + 150 * k - x * k));
+                r = width;
+                //flag_q = 0;
+                q = -1;
+              }
+            }
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+          }
+          else {
+            circle[i] = new Object();
+            circle[i].x = x;
+            circle[i].y = y;
+            circle[i].radius = r;
+            circle[i].id = i;
+
+          }
+          $("#body").append("<div class='Circle' id='cir" + i + "'></div>");
+          $("#cir" + i).css("height", r * 2 + 'px');
+          $("#cir" + i).css("width", r * 2 + 'px');
+          $("#cir" + i).css("border-radius", r + 'px');
+          $("#cir" + i).css("left", x + 'px');
+          $("#cir" + i).css("top", y + 'px');
+        }
+      }
+    }
+
+
+    function sortAray(circle) {
+      var circle_cursor = new Array();
+      var temp;
+      for (var i = 0; i < count; i++) {
+        circle_cursor[i] = new Object();
+        circle_cursor[i].d = Math.sqrt((circle[i].x + circle[i].radius - window.event.clientX) * (circle[i].x + circle[i].radius - window.event.clientX)
+          + (circle[i].y + circle[i].radius - window.event.clientY) * (circle[i].y + circle[i].radius - window.event.clientY)) - circle[i].radius;
+        circle_cursor[i].id = circle[i].id;
+      }
+      for (var i = 0; i < count - 1; i++) {
+        for (var j = 0; j < count - 1 - i; j++) {
+          if (circle_cursor[j].d > circle_cursor[j + 1].d) {
+            temp = circle_cursor[j];
+            circle_cursor[j] = circle_cursor[j + 1];
+            circle_cursor[j + 1] = temp;
+          }
+        }
+      }
+      return circle_cursor;
+    }
+
+
+    document.onmousemove = function (evt) {
+      var oTop = document.getElementById("div1");
+      var oEvent = evt || event;
+      var scrollleft = document.documentElement.scrollLeft || document.body.scrollLeft;
+      var scrolltop = document.documentElement.scrollTop || document.body.scrollTop;
+      var cir = new Array();
+      cir = sortAray(circle);
+
+      if (cir[0].d <= 0) {//在圆内
+        // cir[0].d = Math.abs(cir[0].d);
+        if ((cir[0].d + circle[parseInt(cir[0].id)].radius * 2) > cir[1].d) {//泡泡
+          oTop.style.width = cir[1].d * 2 - 10 + 'px';
+          oTop.style.height = cir[1].d * 2 - 10 + 'px';
+          oTop.style.borderRadius = cir[1].d - 5 + 'px';
+          oTop.style.left = oEvent.clientX - cir[1].d + 5 + "px";
+          oTop.style.top = oEvent.clientY - cir[1].d + 5 + "px";
+
+          $("#body").append("<div class='burble' id='bur'></div>");
+          $("#bur").css("height", (circle[parseInt(cir[0].id)].radius) * 2 + 'px');
+          $("#bur").css("width", (circle[parseInt(cir[0].id)].radius) * 2 + 'px');
+          $("#bur").css("border-radius", '50%');
+          $("#bur").css("border-color", 'red');
+          $("#bur").css("border-style", 'solid');
+          $("#bur").css("border-width", 10 + 'px', 10 + 'px', 10 + 'px', 10 + 'px');
+          $("#bur").css("left", circle[parseInt(cir[0].id)].x - 10 + 'px');
+          $("#bur").css("top", circle[parseInt(cir[0].id)].y - 10 + 'px');
+        }
+        else {
+
+          oTop.style.width = (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) * 2 + 'px';
+          oTop.style.height = (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) * 2 + 'px';
+          oTop.style.borderRadius = cir[0].d + circle[parseInt(cir[0].id)].radius * 2 + 'px';
+          oTop.style.left = oEvent.clientX - (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) + "px";
+          oTop.style.top = oEvent.clientY - (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) + "px";
+
+        }
+      }
+
+      else {
+        if ((cir[0].d + circle[parseInt(cir[0].id)].radius * 2) < cir[1].d) {
+          oTop.style.width = (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) * 2 + 'px';
+          oTop.style.height = (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) * 2 + 'px';
+          oTop.style.borderRadius = (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) + 'px';
+          oTop.style.left = oEvent.clientX - (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) + "px";
+          oTop.style.top = oEvent.clientY - (cir[0].d + circle[parseInt(cir[0].id)].radius * 2) + "px";
+
+        }
+
+        else {//泡泡
+          oTop.style.width = cir[1].d * 2 - 10 + 'px';
+          oTop.style.height = cir[1].d * 2 - 10 + 'px';
+          oTop.style.borderRadius = cir[1].d - 5 + 'px';
+          oTop.style.left = oEvent.clientX - cir[1].d + 5 + "px";
+          oTop.style.top = oEvent.clientY - cir[1].d + 5 + "px";
+          $("#body").append("<div class='burble' id='bur'></div>");
+          $("#bur").css("height", (circle[parseInt(cir[0].id)].radius) * 2 + 'px');
+          $("#bur").css("width", (circle[parseInt(cir[0].id)].radius) * 2 + 'px');
+          $("#bur").css("border-radius", '50%');
+          $("#bur").css("border-color", 'red');
+          $("#bur").css("border-style", 'solid');
+          $("#bur").css("border-width", 10 + 'px', 10 + 'px', 10 + 'px', 10 + 'px');
+          $("#bur").css("left", circle[parseInt(cir[0].id)].x - 10 + 'px');
+          $("#bur").css("top", circle[parseInt(cir[0].id)].y - 10 + 'px');
+
+        }
+      }
+    }
+
+
+
+
+
+
+//计时
+    var second;//时 分 秒
+    second=0;//初始化
+    var millisecond=0;//毫秒
+    var int;
+    var cot=0;
+    function Reset()//重置
+    {
+      window.clearInterval(int);
+      millisecond=second=0;
+      document.getElementById('timetext').value='00s 000ms';
+    }
+  
+    function start()//开始
+    {
+      int=setInterval(timer,10);
+    }
+  
+    function timer()//计时
+    {
+      millisecond=millisecond+10;
+      if(millisecond>=1000)
+      {
+        millisecond=0;
+        second=second+1;
+      }
+      
+      document.getElementById('timetext').value=second+'s'+millisecond+'ms';
+  
+    }
+    var tm = new Array();
+
+    function stop()//暂停
+    {
+      window.clearInterval(int);
+      tm[cot]=document.getElementById('timetext').value;
+      cot++;
+      if(cot==27)
+      {
+        createTable(array1,tm);
+        $(function(){
+        $("#asd").trigger("click");
+        });
+      }
+      //console.log("time:",document.getElementById('timetext').value);
+    }
+//window.onload = function(){
+	var array1=rdsort(sit,lpl);
+    //abc(array1,lpl);
+//}
+    function re()
+    {
+      Reset();
+      abc(array1,lpl); lpl++;
+    }
+    
+
+
+    //数据
+    var tableNode;
+        function createTable(data){
+            tableNode=document.createElement("table");//获得对象
+            tableNode.setAttribute("id","table")
+            var row=27;//获得行号
+            var cols=4;
+            //上面确定了 现在开始创建
+            for(var x=0;x<row;x++){
+                var trNode=tableNode.insertRow();
+                for(var y=0;y<cols;y++){
+                    var tdNode=trNode.insertCell();
+                    if(y==0)
+                    {tdNode.innerHTML=data[x].w;
+                    tdNode.style="display:none";}
+                    else if(y==1)
+                    {tdNode.innerHTML=data[x].l;
+                    tdNode.style="display:none";}
+                    else if(y==2)
+                    {tdNode.innerHTML=data[x].d;
+                    tdNode.style="display:none";}
+                    else if(y==3)
+                    {tdNode.innerHTML=tm[x];
+                    tdNode.style="display:none";}
+
+                }
+            }
+            document.getElementById("body").appendChild(tableNode);//添加到那个位置
+            tableToExcel('table', '下载模板')
+        }
+    //base64转码
+    var base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)));
+    };
+    //替换table数据和worksheet名字
+    var format = function (s, c) {
+        return s.replace(/{(\w+)}/g,
+            function (m, p) {
+                return c[p];
+            });
+    }
+    function tableToExcel(tableid, sheetName) {
+        var uri = 'data:application/vnd.ms-excel;base64,';
+        var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"' +
+            'xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>'
+            + '<x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets>'
+            + '</x:ExcelWorkbook></xml><![endif]-->' +
+            ' <style type="text/css">' +
+            'table{'+
+            'border-collapse:collapse;' +
+            '}' +
+            'td{' +
+            'padding:10px;' +
+            '}' +
+            '</style>' +
+            '</head><body ><table class="excelTable">{table}</table></body></html>';
+        if (!tableid.nodeType) tableid = document.getElementById(tableid);
+        var ctx = {worksheet: sheetName || 'Worksheet', table: tableid.innerHTML};
+        document.getElementById("excelOut").href = uri + base64(format(template, ctx));
+    }
+
+  </script>
+</head>
+
+<body>
+  
+  <div onclick="stop()" id="div1"></div>
+  <div id="body"></div>
+  <input type="text" id="timetext" value="00s 000ms" readonly><br>
+  <input type="text" id="text2" value="w:0,l:0,d:0" readonly><br>
+  <a download="data" id="excelOut" href="#"><button id="asd" type="button" style="display:none"></button></a>
+  <button type="button" onclick="start()" class="time1" id="btn1"></button>
+  <button type="button" onclick="stop()" class="time2" id="btn2"></button>
+  <button type="button" onclick="re()" class="time3" id="btn3"></button>
+</body>
+
+</html>
